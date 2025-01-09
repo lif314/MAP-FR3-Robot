@@ -18,15 +18,15 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Evaluate networks')
 
     # Network
-    parser.add_argument('--network', metavar='N', type=str,nargs='+',
+    parser.add_argument('--network', metavar='N', type=str, nargs='+',
                         help='Path to saved networks to evaluate')
-    parser.add_argument('--input-size', type=int, default=300,
+    parser.add_argument('--input-size', type=int, default=224,
                         help='Input image size for the network')
 
     # Dataset
-    parser.add_argument('--dataset', type=str,default="jacquard",
+    parser.add_argument('--dataset', type=str,
                         help='Dataset Name ("cornell" or "jaquard")')
-    parser.add_argument('--dataset-path', type=str,default="/media/randy/299D817A2D97AD94/xxw/Jacquard/",
+    parser.add_argument('--dataset-path', type=str,
                         help='Path to dataset')
     parser.add_argument('--use-depth', type=int, default=1,
                         help='Use Depth image for evaluation (1/0)')
@@ -74,7 +74,8 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
 
-    device = torch.device("cuda:1")
+    # Get the compute device
+    device = get_device(args.force_cpu)
 
     # Load Dataset
     logging.info('Loading {} Dataset...'.format(args.dataset.title()))
@@ -109,7 +110,6 @@ if __name__ == '__main__':
 
         # Load Network
         net = torch.load(network)
-        net.to(device)
 
         results = {'correct': 0, 'failed': 0}
 

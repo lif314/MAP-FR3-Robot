@@ -380,7 +380,7 @@ class Grasp:
                 [y2 + self.width / 2 * xo, x2 + self.width / 2 * yo],
                 [y1 + self.width / 2 * xo, x1 + self.width / 2 * yo],
             ]
-        ).astype(np.float32))
+        ).astype(np.float))
 
     def max_iou(self, grs):
         """
@@ -424,7 +424,7 @@ def detect_grasps(q_img, ang_img, width_img=None, no_grasps=1):
     :param no_grasps: Max number of grasps to return
     :return: list of Grasps
     """
-    local_max = peak_local_max(q_img, min_distance=20, threshold_abs=0.2, num_peaks=no_grasps) #128 220
+    local_max = peak_local_max(q_img, min_distance=20, threshold_abs=0.2, num_peaks=no_grasps)
 
     grasps = []
     for grasp_point_array in local_max:
@@ -435,8 +435,7 @@ def detect_grasps(q_img, ang_img, width_img=None, no_grasps=1):
         g = Grasp(grasp_point, grasp_angle)
         if width_img is not None:
             g.length = width_img[grasp_point]
-            g.width = g.length /2
-            # g.width = 20
+            g.width = g.length / 2
 
         grasps.append(g)
 

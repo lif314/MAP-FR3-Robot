@@ -69,8 +69,8 @@ class PlaneGraspFR3:
         self.camera = Camera()
         self.intrinsic = self.camera.intrinsics
 
-        # ROBOT
-        self.hostname = "192.168.10.1" # Your Panda IP or hostname
+        # ROBOT https://169.254.37.13/desk/
+        self.hostname = "169.254.37.13" # Your Panda IP or hostname
         self.panda = panda_py.Panda(self.hostname)
         self.panda.set_default_behavior() # Panda default collision thresholds
         self.panda.move_to_start()
@@ -95,16 +95,16 @@ class PlaneGraspFR3:
         self.home_pos = np.array([0.29773711, 0.31993458, 0.43165937])
         self.home_orien = np.array([ 0.91185129,  0.40863425, -0.00820174,  0.0384447 ])
         
-        # eye-to-hand标定结果
-        self.cam_to_base_pose = np.array([[ 0.05096545 , 0.98781948, -0.14702111,  0.5748499 ],
-                                        [ 0.99861288, -0.04845667,  0.02059779, -0.06987559],
-                                        [ 0.01322274, -0.14786695, -0.98891887,  0.84245153],
-                                        [ 0.,          0.,          0.,          1.       ]])
+        # eye on hand标定结果
+        self.cam_to_end_pose = np.array([[0.00891022, -0.99862712,  0.05161862, 0.05125611],
+                    [ 0.99955216,  0.00742,    -0.02899003, -0.0717345],
+                    [ 0.02856722,  0.05185381,  0.99824601, -0.25461249],
+                    [0., 0., 0., 1.0]])
         
         # offset 来自标定的误差
-        self.x_offset = 0.0
-        self.y_offset = 0.0
-        self.z_offset = -0.005
+        self.x_offset = -0.015
+        self.y_offset = -0.05
+        self.z_offset = -0.13
         self.angle_offset = 3.0
        
         self.cam_depth_scale = 1.007080078124112689e-03 # 深度尺度 大概深度图/1000 表示真实深度
@@ -167,8 +167,14 @@ class PlaneGraspFR3:
         camera_xyz = np.asarray([pos_x, pos_y, pos_z]).reshape(3, 1)
         print("camera_xyz: ", camera_xyz)
         
-        # Convert camera to robot coordinates
-        base_xyz = transform_camera_to_base(camera_xyz, self.cam_to_base_pose)
+        end_T_base = self.panda.get_pose() # 4*4
+            # base_T_end = np.linalg.inv(end_T_base)
+        base_T_cam = np.dot(end_T_base, self.cam_to_end_pose)
+        # end-effector坐标系下的x,y,z
+        base_xyz = transform_camera_to_base(camera_xyz, base_T_cam)
+        # print("base_xyz: ", base_xyz)
+
+        # 解决夹爪中心与末端的偏移
         base_xyz[0] += self.x_offset
         base_xyz[1] += self.y_offset
         base_xyz[2] += self.z_offset

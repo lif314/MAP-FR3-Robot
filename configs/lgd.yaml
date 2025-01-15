@@ -1,0 +1,10 @@
+model_name: LGD
+use_rgb: 1
+use_depth: 0
+
+checkpoints:
+  lgd: plane_grasping/LGD/checkpoints/det-seg-refine.pth
+  lgd: plane_grasping/LGD/checkpoints/lggcnn.pth
+  lgd: plane_grasping/LGD/checkpoints/lgm-diff.pth
+  lgd: plane_grasping/LGD/checkpoints/lgrconvnet.pth
+  lgd: plane_grasping/LGD/checkpoints/model_lgd_grasp_anything++.pth

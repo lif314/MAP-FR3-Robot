@@ -1,0 +1,9 @@
+model_name: GRCNN
+use_rgb: 1
+use_depth: 1
+
+checkpoints:
+  grcnn: plane_grasping/GRCNN/checkpoints/cornell-randsplit-rgbd-grconvnet3-drop1-ch16/epoch_30_iou_0.97.pth
+  grcnn: plane_grasping/GRCNN/checkpoints/cornell-randsplit-rgbd-grconvnet3-drop1-ch32/epoch_19_iou_0.98.pth
+  grcnn: plane_grasping/GRCNN/checkpoints/jacquard-d-grconvnet3-drop0-ch32/epoch_50_iou_0.94.pth
+  grcnn: plane_grasping/GRCNN/checkpoints/jacquard-rgbd-grconvnet3-drop0-ch32/epoch_48_iou_0.93.pth

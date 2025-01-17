@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 plane_grasping/LGD/checkpoints/*
+logs/
 
 # C extensions
 *.so

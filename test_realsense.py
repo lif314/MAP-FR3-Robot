@@ -20,21 +20,14 @@ config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
 # 启动管道
 pipeline.start(config)
 
-# 创建对齐对象，将深度图对齐到彩色图
-align_to = rs.stream.color
-align = rs.align(align_to)
-
 try:
-    print("开始捕获图像，按S键保存，按ESC键退出")
+    print("开始捕获图像，按Ctrl+S保存，按Ctrl+C退出")
     count = 0
     while True:
         # 等待一帧数据
         frames = pipeline.wait_for_frames()
-
-        # 对齐深度图到RGB图像
-        aligned_frames = align.process(frames)
-        depth_frame = aligned_frames.get_depth_frame()
-        color_frame = aligned_frames.get_color_frame()
+        depth_frame = frames.get_depth_frame()
+        color_frame = frames.get_color_frame()
 
         if not depth_frame or not color_frame:
             continue
@@ -43,16 +36,14 @@ try:
         depth_image = np.asanyarray(depth_frame.get_data())
         color_image = np.asanyarray(color_frame.get_data())
 
-        # 可视化深度图
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
-
         # 显示图像
         cv2.imshow('RGB Image', color_image)
-        cv2.imshow('Depth Image (Aligned)', depth_colormap)
+        cv2.imshow('Depth Image', depth_image)
 
         # 检测键盘输入
-        key = cv2.waitKey(1)
-        if key == ord('s'):  # 按下'S'键保存图像
+        key = cv2.waitKey(0)
+        if key == ord('s'):
+            # 保存图像
             rgb_path = os.path.join(rgb_dir, f"{count:04d}.png")
             depth_path = os.path.join(depth_dir, f"{count:04d}.png")
             
@@ -63,7 +54,6 @@ try:
             count += 1
 
         elif key == 27:  # 按下ESC键退出
-            print("退出程序")
             break
 
 except KeyboardInterrupt:

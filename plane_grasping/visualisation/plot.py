@@ -4,7 +4,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 
-from processing.grasp import detect_grasps
+from plane_grasping.processing.grasp import detect_grasps
 
 warnings.filterwarnings("ignore")
 

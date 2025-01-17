@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 
-from processing import image
+from plane_grasping.processing import image
 
 class CameraData:
     """

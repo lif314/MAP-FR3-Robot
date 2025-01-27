@@ -1,12 +1,14 @@
-# MAP GR3
+# MAP FR3
+
+```
+Working in progress...
+```
 
 ## Plane Grasping
 - GGCNN: Only depth
 - GRCNN: depth or RGB
 - LGD: RGB or text
 
-
-# franka_grasp_baseline
 Table top manipulation based on franka fr3 robot arm and graspnet, including calibration, 3d reconstruction and grasping. 
 
 ## Install
